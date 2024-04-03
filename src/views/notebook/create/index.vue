@@ -1,39 +1,44 @@
 <template>
   <div class="layout__page">
     <div class="layout__header">
-      <van-nav-bar :title="isEdit ? '编辑任务集' : '新建任务集'"
-                   :right-text="isEdit ? '删除' : ''"
-                   left-arrow
-                   @click-left="handleClickLeft"
-                   @click-right="confirmDeleteNotebook" />
+      <van-nav-bar
+        :title="isEdit ? '编辑任务集' : '新建任务集'"
+        :right-text="isEdit ? '删除' : ''"
+        left-arrow
+        @click-left="handleClickLeft"
+        @click-right="confirmDeleteNotebook"
+      />
     </div>
-    <div class="layout__body"
-         v-touch:swipe="handleSwipeRight">
+    <div class="layout__body" v-touch:swipe="handleSwipeRight">
       <van-cell-group class="notebook__create-form">
-        <van-field v-model="formModel.name"
-                   label="任务集名称"
-                   placeholder="请输入任务集名称"
-                   maxlength="15"
-                   required />
-        <van-cell title="任务集主题色"
-                  :value="themeColorText"
-                  @click="setSelectThemeColorShow(true)"
-                  is-link></van-cell>
+        <van-field
+          v-model="formModel.name"
+          label="任务集名称"
+          placeholder="请输入任务集名称"
+          maxlength="15"
+          required
+        />
+        <van-cell
+          title="任务集主题色"
+          :value="themeColorText"
+          @click="setSelectThemeColorShow(true)"
+          is-link
+        ></van-cell>
       </van-cell-group>
-      <div class="bottom-button--submit"
-           id="fixed-bottom">
-        <van-button type="primary"
-                    size="large"
-                    @click="handleCreateNotebook">提交</van-button>
+      <div class="bottom-button--submit" id="fixed-bottom">
+        <van-button type="primary" size="large" @click="handleCreateNotebook"
+          >提交</van-button
+        >
       </div>
     </div>
-    <van-popup v-model="selectThemeColorShow"
-               position="bottom">
-      <van-picker show-toolbar
-                  title="选择主题色"
-                  :columns="THEME_COLOR_ARRAY"
-                  @cancel="setSelectThemeColorShow(false)"
-                  @confirm="handleSelectThemeColor" />
+    <van-popup v-model="selectThemeColorShow" position="bottom">
+      <van-picker
+        show-toolbar
+        title="选择主题色"
+        :columns="THEME_COLOR_ARRAY"
+        @cancel="setSelectThemeColorShow(false)"
+        @confirm="handleSelectThemeColor"
+      />
     </van-popup>
   </div>
 </template>
@@ -41,7 +46,7 @@
 <script lang="ts">
 import { Component, Vue, Mixins } from 'vue-property-decorator';
 import ValidatorUtils from '@/utils/validate';
-import SwipeRightMixin from '@/utils/swipe-right-mixin';
+import SwipeRightMixin from '@/mixin/swipe-right-mixin';
 import { notebookInteractor } from '@/core';
 import { THEME_COLOR_MAP, THEME_COLOR_ARRAY } from '@/constants/notebook';
 import { INotebook, ValidateError } from '@/types';
@@ -54,7 +59,7 @@ import {
   Cell,
   Popup,
   Picker,
-  Dialog
+  Dialog,
 } from 'vant';
 
 Vue.use(NavBar)
@@ -66,7 +71,7 @@ Vue.use(NavBar)
   .use(Picker);
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class NotebookCreate extends Mixins(SwipeRightMixin) {
   private get id() {
@@ -93,11 +98,11 @@ export default class NotebookCreate extends Mixins(SwipeRightMixin) {
   private formModel: INotebook = {
     name: '',
     themeColor: 'green',
-    notes: []
+    notes: [],
   };
 
   private rules = {
-    name: [{ required: true, message: '请填写任务集名称' }]
+    name: [{ required: true, message: '请填写任务集名称' }],
   };
 
   private handleClickLeft() {
@@ -116,7 +121,7 @@ export default class NotebookCreate extends Mixins(SwipeRightMixin) {
   private confirmDeleteNotebook() {
     Dialog.alert({
       title: '删除确认',
-      message: '是否删除该任务集?'
+      message: '是否删除该任务集?',
     }).then(() => {
       this.handleDeleteNotebook(this.id!);
     });
@@ -158,7 +163,7 @@ export default class NotebookCreate extends Mixins(SwipeRightMixin) {
           this.formModel = {
             name: notebook.name,
             themeColor: notebook.themeColor,
-            notes: notebook.notes
+            notes: notebook.notes,
           };
         }
       } catch (error) {
@@ -168,7 +173,7 @@ export default class NotebookCreate extends Mixins(SwipeRightMixin) {
 
     this.validator = new ValidatorUtils({
       rules: this.rules,
-      data: this.formModel
+      data: this.formModel,
     });
   }
 }

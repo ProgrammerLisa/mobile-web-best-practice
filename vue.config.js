@@ -12,8 +12,8 @@ const IS_PRO = NODE_ENV === 'production';
 
 const commonPlugins = [
   new webpack.DefinePlugin({
-    __VERSION__: JSON.stringify(version)
-  })
+    __VERSION__: JSON.stringify(version),
+  }),
 ];
 
 module.exports = {
@@ -23,9 +23,9 @@ module.exports = {
     extract: false,
     loaderOptions: {
       less: {
-        modifyVars
-      }
-    }
+        modifyVars,
+      },
+    },
   },
   configureWebpack: () => {
     if (IS_PRO) {
@@ -36,7 +36,7 @@ module.exports = {
             release: version, //发布的版本
             include: path.join(__dirname, './dist/js'), //需要上传到sentry服务器的资源目录,会自动匹配 js 以及 map 文件
             urlPrefix: '~/mobile-web-best-practice/js', //线上对应的 url 资源的相对路径
-            ignore: ['node_modules'] //忽略文件目录, 当然我们在 inlcude 中制定了文件路径,这个忽略目录可以不加
+            ignore: ['node_modules'], //忽略文件目录, 当然我们在 inlcude 中制定了文件路径,这个忽略目录可以不加
           })
         );
       }
@@ -47,8 +47,9 @@ module.exports = {
             packageNameKey: 'packageId',
             packageNameValue: 'main',
             version: 1,
-            baseUrl: 'https://mcuking.github.io/mobile-web-best-practice/',
-            fileTypes: ['js', 'css', 'png']
+            baseUrl:
+              'https://ProgrammerLisa.github.io/mobile-web-best-practice/',
+            fileTypes: ['js', 'css', 'png'],
           })
         );
       }
@@ -62,17 +63,17 @@ module.exports = {
           'vue-router': 'VueRouter',
           mockjs: 'Mock',
           moment: 'moment',
-          hammerjs: 'Hammer'
-        }
+          hammerjs: 'Hammer',
+        },
       };
     } else {
       return {
-        plugins: [...commonPlugins]
+        plugins: [...commonPlugins],
       };
     }
   },
   devServer: {
     port: 8088, //配置端口
-    open: true //自动开启浏览器
-  }
+    open: true, //自动开启浏览器
+  },
 };

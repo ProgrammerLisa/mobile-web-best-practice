@@ -1,54 +1,65 @@
 <template>
   <div class="layout__page">
     <div class="layout__header">
-      <van-nav-bar :title="isEdit ? '编辑任务' : '新建任务'"
-                   :right-text="isEdit ? '删除' : ''"
-                   left-arrow
-                   @click-left="handleClickLeft"
-                   @click-right="confirmDeleteNote" />
+      <van-nav-bar
+        :title="isEdit ? '编辑任务' : '新建任务'"
+        :right-text="isEdit ? '删除' : ''"
+        left-arrow
+        @click-left="handleClickLeft"
+        @click-right="confirmDeleteNote"
+      />
     </div>
-    <div class="layout__body"
-         v-touch:swipe="handleSwipeRight">
+    <div class="layout__body" v-touch:swipe="handleSwipeRight">
       <van-cell-group class="note__create-form">
-        <van-field v-model="formModel.name"
-                   label="任务名称"
-                   placeholder="请输入任务名称"
-                   maxlength="16"
-                   required />
-        <van-cell title="截止时间"
-                  :value="deadlineText"
-                  @click="setSelectDeadlineShow(true)"
-                  is-link></van-cell>
-        <van-cell title="同步任务到手机日历"
-                  @click="toggleSyncCalendar">
-          <van-checkbox v-model="formModel.isSync"
-                        slot="right-icon"
-                        :disabled="!formModel.deadline" />
+        <van-field
+          v-model="formModel.name"
+          label="任务名称"
+          placeholder="请输入任务名称"
+          maxlength="16"
+          required
+        />
+        <van-cell
+          title="截止时间"
+          :value="deadlineText"
+          @click="setSelectDeadlineShow(true)"
+          is-link
+        ></van-cell>
+        <van-cell title="同步任务到手机日历" @click="toggleSyncCalendar">
+          <van-checkbox
+            v-model="formModel.isSync"
+            slot="right-icon"
+            :disabled="!formModel.deadline"
+          />
         </van-cell>
-        <van-field v-model="formModel.remark"
-                   label="备注"
-                   type="textarea"
-                   placeholder="请输入备注"
-                   maxlength="50" />
+        <van-field
+          v-model="formModel.remark"
+          label="备注"
+          type="textarea"
+          placeholder="请输入备注"
+          maxlength="50"
+        />
       </van-cell-group>
-      <span class="note__create-form--metion extend-click"
-            @click="handleMentionClick">每日名言（演示接口缓存效果）</span>
-      <div class="bottom-button--submit"
-           id="fixed-bottom">
-        <van-button type="primary"
-                    size="large"
-                    @click="handleCreateNote">提交</van-button>
+      <span
+        class="note__create-form--metion extend-click"
+        @click="handleMentionClick"
+        >每日名言（演示接口缓存效果）</span
+      >
+      <div class="bottom-button--submit" id="fixed-bottom">
+        <van-button type="primary" size="large" @click="handleCreateNote"
+          >提交</van-button
+        >
       </div>
     </div>
-    <van-popup v-model="selectDeadlineShow"
-               position="bottom">
-      <van-datetime-picker v-model="formModel.deadline"
-                           title="选择截止时间"
-                           type="datetime"
-                           :formatter="dateTimePickerFormatter"
-                           :min-date="minDate"
-                           @cancel="setSelectDeadlineShow(false)"
-                           @confirm="handleTimePickerConfirm" />
+    <van-popup v-model="selectDeadlineShow" position="bottom">
+      <van-datetime-picker
+        v-model="formModel.deadline"
+        title="选择截止时间"
+        type="datetime"
+        :formatter="dateTimePickerFormatter"
+        :min-date="minDate"
+        @cancel="setSelectDeadlineShow(false)"
+        @confirm="handleTimePickerConfirm"
+      />
     </van-popup>
     <transition>
       <router-view class="above-loaded-page" />
@@ -60,7 +71,7 @@
 import { Component, Vue, Mixins } from 'vue-property-decorator';
 import moment from 'moment';
 import ValidatorUtils from '@/utils/validate';
-import SwipeRightMixin from '@/utils/swipe-right-mixin';
+import SwipeRightMixin from '@/mixin/swipe-right-mixin';
 import { noteInteractor } from '@/core';
 import { dateTimePickerFormatter, createRandomNum } from '@/utils/common-tools';
 import { INote, ValidateError } from '@/types';
@@ -74,7 +85,7 @@ import {
   Popup,
   DatetimePicker,
   Dialog,
-  Checkbox
+  Checkbox,
 } from 'vant';
 
 Vue.use(NavBar)
@@ -87,7 +98,7 @@ Vue.use(NavBar)
   .use(Checkbox);
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class NoteCreate extends Mixins(SwipeRightMixin) {
   private get id() {
@@ -119,13 +130,13 @@ export default class NoteCreate extends Mixins(SwipeRightMixin) {
     deadline: undefined,
     isSync: false,
     isDone: false,
-    remark: ''
+    remark: '',
   };
 
   private deadlineText = '';
 
   private rules = {
-    name: [{ required: true, message: '请填写任务名称' }]
+    name: [{ required: true, message: '请填写任务名称' }],
   };
 
   private handleClickLeft() {
@@ -138,7 +149,7 @@ export default class NoteCreate extends Mixins(SwipeRightMixin) {
 
   private handleMentionClick() {
     this.$router.push({
-      name: 'quote'
+      name: 'quote',
     });
   }
 
@@ -152,7 +163,7 @@ export default class NoteCreate extends Mixins(SwipeRightMixin) {
   private toggleSyncCalendar() {
     if (!this.formModel.deadline) {
       return this.$toast({
-        message: '请先选择截止日期'
+        message: '请先选择截止日期',
       });
     }
     this.formModel.isSync = !this.formModel.isSync;
@@ -161,7 +172,7 @@ export default class NoteCreate extends Mixins(SwipeRightMixin) {
   private confirmDeleteNote() {
     Dialog.alert({
       title: '删除确认',
-      message: '是否删除该任务?'
+      message: '是否删除该任务?',
     }).then(() => {
       this.handleDeleteNote(this.notebookId, this.id!);
     });
@@ -190,7 +201,7 @@ export default class NoteCreate extends Mixins(SwipeRightMixin) {
               id: formModel.id,
               title: formModel.name,
               deadline: formModel.deadline.getTime(),
-              alarm: [5]
+              alarm: [5],
             };
             await noteInteractor.syncCalendar(params, notebookId);
           }
@@ -216,7 +227,7 @@ export default class NoteCreate extends Mixins(SwipeRightMixin) {
             deadline: note.deadline,
             isDone: note.isDone,
             isSync: note.isSync,
-            remark: note.remark
+            remark: note.remark,
           };
           if (this.formModel.deadline) {
             this.deadlineText = moment(this.formModel.deadline).format(
@@ -231,7 +242,7 @@ export default class NoteCreate extends Mixins(SwipeRightMixin) {
 
     this.validator = new ValidatorUtils({
       rules: this.rules,
-      data: this.formModel
+      data: this.formModel,
     });
   }
 }
